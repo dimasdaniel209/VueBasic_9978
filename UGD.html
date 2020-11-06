@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unguided</title>
+    <script src="vue.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+</head>
+<body class="jumbotron">
+    <div id="app" class="card border border-success" style="width: 20rem; margin: auto;">
+        <header class="card-header d-flex justify-content-center">
+            <p>🤔Tebak Angka🤔</p>
+        </header>
+        <div class="card-body d-flex justify-content-center">
+            <div class="card-body">
+                <input type="number" class="form-control" v-model="guess" :disabled="disabled" placeholder="Masukkan Angka"/>
+                <br>
+                <button class="btn btn-primary btn-sm" @click="play" :disabled="disabled" style="text-align: center; width:100%">TEBAK</button>
+            </div>
+        </div>
+        <div class="card-body d-flex justify-content-center">
+            <div class="text-center" v-show="yay">
+                <p>Benar</p> 
+                <button class="btn btn-success" style="text-align: center; width:100%" @click="playagain" >Main Ulang</button>
+            </div>
+            <div class="text-center" v-show="nay">
+                <p>Coba Lagi</p>
+                <p>Sisa kesempatan : {{ chance }}</p>  
+                <button class="btn btn-warning" style="text-align: center; width:100%" @click="tryagain" >Coba Lagi</button>
+            </div>
+            <div class="text-center" v-show="fail">
+                <p>Kalah! </p> 
+                <button class="btn btn-danger" style="text-align: center; width:100%" @click="playagain" >Main Ulang</button>
+            </div>
+        </div>
+        <footer class="d-flex justify-content-center">
+            {{ `[${mahasiswa.nama}] [${mahasiswa.npm}] [${mahasiswa.kelas}]` }}
+        </footer>
+    </div>
+</body>
+<script>
+    new Vue({
+        el:"#app",
+        data: {
+            mahasiswa: {
+                nama:'Daniel Seto Dimas',
+                npm:'180709978',
+                kelas:'A',
+            },
+            number: Math.floor(Math.random() * 10)+1,
+            guess:0,
+            chance:3,
+            nay:null,
+            yay:null,
+            fail:null,
+            disabled:false
+        },
+        methods: {
+            play(){
+                console.log("number: " + this.number);
+                if(this.guess == this.number){
+                    this.yay = true;
+                } else {
+                    this.nay = true;
+                    this.disabled = true;
+                    this.chance--;
+                    if(this.chance == 0){
+                        this.fail = true;
+                        this.nay = null;
+                    }
+                }
+            },
+            tryagain(){
+                this.disabled = false;
+                this.nay = null;
+            },
+            playagain(){
+                location.reload();
+            }
+        }
+    });
+</script>
+</html>
